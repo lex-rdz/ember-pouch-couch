@@ -6,6 +6,15 @@ module.exports = function(environment) {
     environment,
     rootURL: '/',
     locationType: 'auto',
+
+    // Ember Pouch/Couch Database
+    emberPouch: {
+      localDb: 'test',
+      remoteDb: 'http://localhost:5984/ember_db',
+      // Model  Relationships
+      saveHasMany: true,
+    },
+
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build

@@ -1,0 +1,28 @@
+<h3> Owners List </h3>
+
+<ul>
+  {{#each model as |owner|}}
+    <li>
+      {{owner.fullName}} |
+      {{owner.age}} años |
+      <a {{action 'select' owner}} >Editar</a> |
+      <a {{action 'delete' owner}} >Eliminar</a> 
+    </li>
+  {{else}}
+    <li>No owners yet..</li>
+  {{/each}}
+</ul>
+
+<h3> Create Owner </h3>
+<form {{action 'createOwner' on='submit'}}>
+	<p> Name: {{input type="text" value=fullName}} </p>
+  <p> Age: {{input type="number" value=age}} </p>
+  <p> <button>Save</button></p>
+</form>
+
+<h3> Edit Owner </h3>
+<form {{action 'editOwner' selectedOwner on='submit'}}>
+	<p> Name: {{input type="text" value=selectedOwner.fullName}} </p>
+  <p> Age: {{input type="number" value=selectedOwner.age}} </p>
+  <p> <button>Save</button></p>
+</form>

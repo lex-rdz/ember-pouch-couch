@@ -12,7 +12,7 @@ module.exports = function(environment) {
       localDb: 'test',
       remoteDb: 'http://localhost:5984/ember_db',
       // Model  Relationships
-      saveHasMany: true,
+      // saveHasMany: true,
     },
 
     EmberENV: {

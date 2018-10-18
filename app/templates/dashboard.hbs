@@ -7,7 +7,7 @@
             <div>
               {{owner.fullName}} |
               {{owner.age}} años
-              <a {{action 'delete' owner}} class="secondary-content"> <i class="material-icons">delete</i></a>
+              <a {{action 'deleteOwner' owner}} class="secondary-content"> <i class="material-icons">delete</i></a>
               <a {{action 'selectOwner' owner}} class="secondary-content"> <i class="material-icons">edit</i></a>
             </div>
             <div>
@@ -36,8 +36,17 @@
               {{item.name}} |
               {{item.description}} |
               Owned by {{if item.owner item.owner.fullName 'None'}}
-              <a {{action 'delete' item}} class="secondary-content"> <i class="material-icons">delete</i></a>
+              <a {{action 'deleteItem' item}} class="secondary-content"> <i class="material-icons">delete</i></a>
               <a {{action 'selectItem' item}} class="secondary-content"> <i class="material-icons">edit</i></a>
+            </div>
+            <div>
+              <ul>
+                {{#each item.photos as |photo|}}
+                  <li>{{photo.name}}</li>
+                {{else}}
+                  <li>No photos yet...</li>
+                {{/each}}
+              </ul>
             </div>
           </li>
         {{else}}
@@ -53,11 +62,11 @@
     <div class="row">
         <form class="col s12" {{action 'createOwner' on='submit'}}>
           <div class="row">
-            <div class="input-field col s6">
+            <div class="input-field col s8">
               {{input type="text" value=fullName}}
               <label> Name</label>
             </div>
-            <div class="input-field col s6">
+            <div class="input-field col s4">
               {{input type="number" value=age}}
               <label> Age</label>
             </div>
@@ -73,17 +82,17 @@
     <div class="row">
         <form class="col s12" {{action 'createItem' on='submit'}}>
           <div class="row">
-            <div class="input-field col s6">
+            <div class="input-field col s4">
               {{input type="text" value=itemName}}
               <label> Name</label>
             </div>
-            <div class="input-field col s6">
-              {{input type="text" value=description}}
+            <div class="input-field col s8">
+              {{textarea class="materialize-textarea" type="text" value=description}}
               <label> Description</label>
             </div>
           </div>
           <div class="row">
-            <div class="input-field col s8">
+            <div class="input-field col s10">
                 {{#power-select
                   options=model.owners
                   selected=ownerOfItem
@@ -94,7 +103,7 @@
                   {{owner.fullName}}
                 {{/power-select}}
             </div>
-            <div class="col s4">
+            <div class="col s2">
               {{#if ownerOfItem}}
                 <button class="waves-effect waves-light btn">Save</button>
               {{/if}}
@@ -112,11 +121,11 @@
       <div class="row">
           <form class="col s12"  {{action 'editOwner' selectedOwner on='submit'}}>
             <div class="row">
-              <div class="input-field col s6">
+              <div class="input-field col s8">
                 {{input type="text" value=selectedOwner.fullName}}
                 <label> Name</label>
               </div>
-              <div class="input-field col s6">
+              <div class="input-field col s4">
                 {{input type="number" value=selectedOwner.age}}
                 <label> Age</label>
               </div>
@@ -134,17 +143,17 @@
       <div class="row">
           <form class="col s12" {{action 'editItem' selectedItem on='submit'}}>
             <div class="row">
-              <div class="input-field col s6">
+              <div class="input-field col s4">
                 {{input type="text" value=selectedItem.name}}
                 <label> Name</label>
               </div>
-              <div class="input-field col s6">
-                {{input type="text" value=selectedItem.description}}
+              <div class="input-field col s8">
+                {{textarea class="materialize-textarea" type="text" value=selectedItem.description}}
                 <label> Description</label>
               </div>
             </div>
             <div class="row">
-              <div class="input-field col s8">
+              <div class="input-field col s6">
                   {{#power-select
                     options=model.owners
                     selected=selectedItem.owner
@@ -156,6 +165,16 @@
                   {{/power-select}}
               </div>
               <div class="col s4">
+                <div class="input-field col s4">
+                  {{x-file-input
+                    class="btn white-text"
+                    multiple=false
+                    action=(action 'insertImage' selectedItem)
+                    accept="image/*"
+                    alt="Agregar Foto"}}
+                </div>
+              </div>
+              <div class="col s2">
                 <button class="waves-effect waves-light btn">Save</button>
               </div>
             </div>

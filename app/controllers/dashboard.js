@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import { isBlank } from '@ember/utils';
+import { all } from 'rsvp';
 
 export default Controller.extend({
   ownerOfItem: null,
@@ -57,8 +58,34 @@ export default Controller.extend({
       })
     },
 
-    delete(record) {
-      record.destroyRecord()
+    deleteItem(item) {
+      item.destroyRecord()
+    },
+    deleteOwner(owner) {
+      let deletedItems = [];
+
+      owner.get('items').then((items) => {
+        items.map((item) => {
+          deletedItems.push(item.destroyRecord());
+        });
+      });
+
+      all(deletedItems).then(() => {
+        owner.destroyRecord();
+      });
+    },
+
+    insertImage(owner, files) {
+      let photo = files[0];
+       if (photo.type.match('image.*')) {
+         let length = owner.get('photos.length');
+         let fileType = photo.type.split("/")[1];
+         owner.get('photos').addObject(Ember.Object.create({
+          'name': 'Photo_' + length + '.' + fileType,
+          'content_type': photo.type,
+          'data': photo
+        }));
+       }
     },
 
     selectItem(item){
